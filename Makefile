@@ -15,10 +15,10 @@ LIBS = -lm
 all:
 	@echo "*** Run 'make check' or 'make check-all' to check your work."
 
-test%: dmalloc.o basealloc.o test%.o
+test%: sp130Encoder.o utilities.o test%.o
 	$(call run,$(CXX) $(CXXFLAGS) $(O) -o $@ $^ $(LDFLAGS) $(LIBS),LINK $@)
 
-manager: sp130Encoder.o main.o
+manager: sp130Encoder.o main.o utilities.o
 	$(call run,$(CXX) $(CXXFLAGS) $(O) -o $@ $^ $(LDFLAGS) $(LIBS),LINK $@)
 
 check: $(patsubst %,run-%,$(TESTS))
