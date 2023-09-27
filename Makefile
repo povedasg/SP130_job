@@ -18,7 +18,7 @@ all:
 test%: sp130Encoder.o utilities.o test%.o
 	$(call run,$(CXX) $(CXXFLAGS) $(O) -o $@ $^ $(LDFLAGS) $(LIBS),LINK $@)
 
-sp130Manager: sp130Encoder.o main.o utilities.o sp130Manager.o
+sp130Manager: sp130Encoder.o main.o utilities.o sp130Manager.o SerialPort.o
 	$(call run,$(CXX) $(CXXFLAGS) $(O) -o $@ $^ $(LDFLAGS) $(LIBS),LINK $@)
 
 check: $(patsubst %,run-%,$(TESTS))

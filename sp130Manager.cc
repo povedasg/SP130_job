@@ -1,9 +1,29 @@
 #include "sp130Manager.hh"
 #include "utilities.hh"
 
+using mn::CppLinuxSerial::BaudRate;
+using mn::CppLinuxSerial::NumDataBits;
+using mn::CppLinuxSerial::Parity;
+using mn::CppLinuxSerial::NumStopBits;
+using mn::CppLinuxSerial::HardwareFlowControl;
+using mn::CppLinuxSerial::SoftwareFlowControl;
+
 Sp130Manager::Sp130Manager()
 {
+	//Set up the serial port:
+	serialManager = new SerialPort(SERIAL_PORT, 
+		BaudRate::B_115200, 
+		NumDataBits::EIGHT, 
+		Parity::NONE, 
+		NumStopBits::ONE, 
+		HardwareFlowControl::ON, 
+		SoftwareFlowControl::OFF);
 
+	printf("SET UP SERIAL PORT: %s with baud: 115200\n",SERIAL_PORT);
+
+	serialManager->SetTimeout(1000); // Block when reading for 1000ms
+
+	serialManager->Open();
 }
 Sp130Manager::~Sp130Manager()
 {
@@ -12,8 +32,6 @@ Sp130Manager::~Sp130Manager()
 
 void Sp130Manager::setNewImage(const char* path)
 {
-	//TODO!! Link with serial communication:
-
 	//Get img data:
 	ET_ErrorTypes res;
 	size_t totalImgRead = read_hex_file(path, this->img, sizeof(this->img));
@@ -32,13 +50,17 @@ void Sp130Manager::setNewImage(const char* path)
 	if(res == E_OK)
 	{
 		printf("SENDING MESSAGE TO SP130 to change Image for (%s) (%ld bytes): \n", path, total);
-		printf("___________________________________\n");
+		printf("________MSG SENT SERIAL ___________________________\n");
 		print_hex(this->msg,total);
-		printf("___________________________________\n");
+		printf("________MSG SENT SERIAL ___________________________\n");
 	}
 	else
 	{
 		printf("ERROR BUILDING MESSAGE!! Sp130Manager::setNewImage (%s)\n", path);
 
 	}
+	/* NOW SEND TO SERIAL PORT: */
+	std::vector<unsigned char> data (this->msg, this->msg + total / sizeof(this->msg[0]) );
+	serialManager->WriteBinary(data);
+
 }
