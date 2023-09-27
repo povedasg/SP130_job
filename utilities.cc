@@ -84,7 +84,7 @@ void print_hex(char* data, size_t size)
     printf("\n");
 }
 
-size_t read_hex_file(char* path, char* data, size_t sizeData) 
+size_t read_hex_file(const char* path, char* data, size_t sizeData) 
 {
     FILE *fp;
     size_t res = 0;

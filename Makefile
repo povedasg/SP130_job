@@ -3,7 +3,7 @@ O ?= 2
 
 TESTS = $(patsubst %.cc,%,$(sort $(wildcard test[0-9][0-9][0-9].cc)))
 
-all: $(TESTS) manager
+all: $(TESTS) sp130Manager
 
 -include rules.mk
 
@@ -18,7 +18,7 @@ all:
 test%: sp130Encoder.o utilities.o test%.o
 	$(call run,$(CXX) $(CXXFLAGS) $(O) -o $@ $^ $(LDFLAGS) $(LIBS),LINK $@)
 
-manager: sp130Encoder.o main.o utilities.o
+sp130Manager: sp130Encoder.o main.o utilities.o sp130Manager.o
 	$(call run,$(CXX) $(CXXFLAGS) $(O) -o $@ $^ $(LDFLAGS) $(LIBS),LINK $@)
 
 check: $(patsubst %,run-%,$(TESTS))

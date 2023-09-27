@@ -1,30 +1,44 @@
 #include <cstdlib>
 #include <cstdio>
-
-#include "sp130Encoder.hh"
-#include "utilities.hh"
 #include <cstring>
+
+#include "sp130Manager.hh"
 
 int main(int argc, char **argv) 
 {
-    printf("Lets encode a msg:\n");
-
-    Sp130Encoder encoder;
-    char test[250];
-    size_t total = 0; 
-
-    printf("ENDIAN IS: %d\n", check_for_endianness());
-
-    memset(test,0,sizeof(test));
-    ET_ErrorTypes res = encoder.encodeMsg(E_SERIAL_NUM_REQUEST, test,sizeof(test), &total);
-
-    printf("RES: %d\n", res);
-    printf("Print the msg...(%ld bytes) :\n", total);
-    for(size_t i = 0; i < total; ++i)
-    {
-        printf("%02X ", test[i]);
+    Sp130Manager manager;
+    //
+    if (argc == 1 || (argc > 1 && (strcmp(argv[1], "-h") == 0
+                     || strcmp(argv[1], "--help") == 0))) {
+        printf("Usage for sp130Manager:\n\
+       --> ./sp130Manager TYPE [PATH]\n\
+\n\
+  Each TYPE is a real number.\n\
+  \t 1 --> Set new Image (If no Path indicated the default is 'testImg.PNG'\n\
+\n\
+  Each PATH is a String. It Indicates the path of the file to use as data to set (optional depending on type).\n\
+\n");
+        exit(0);
     }
-    printf("\n");
-    printf("Should be:\n02 00 03 36 34 2F 03 2D\n");
-    
+
+    if(argc > 1)
+    {
+        switch(strtol(argv[1],NULL,10))
+        {
+        case 1:
+            //Set Image
+            if(argc == 2)
+            {
+                manager.setNewImage("testImg.PNG");
+            }
+            else
+            {
+                manager.setNewImage(argv[2]);
+            }
+
+            break;
+        default:
+            printf("PLEASE INPUT A CORRECT TYPE!\n");
+        }
+    }
 }

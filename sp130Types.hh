@@ -6,6 +6,7 @@
 #define SIZE_MSG_METADATA 5 /*header + end + size + CRC*/
 #define COORDINATES_IMG_X 0
 #define COORDINATES_IMG_Y 0
+#define MAX_POSSIBLE_SIZE_IMG (0xFFFF - 10) /* MAX 2 bytes - 10 (type, sep, imgID,x,y,legth) */
 
 #define START_MSG 0x02 
 #define END_MSG 0x03 

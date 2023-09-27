@@ -28,6 +28,6 @@ char calculate_checksum(char* data, size_t size);
 void print_hex(char* data, size_t size);
 
 /* Returns the bytes read */
-size_t read_hex_file(char* path, char* data, size_t sizeData);
+size_t read_hex_file(const char* path, char* data, size_t sizeData);
 
 #endif
